@@ -1,0 +1,43 @@
+<html>
+    <head>
+        <title>ChatForm</title>
+        <link rel="stylesheet" href="/content/chatForm.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+        <script src="https://kit.fontawesome.com/43b6aeb8f4.js" crossorigin="anonymous"></script>  
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
+    </head>
+    <body>
+        <div class="container" ng-app="">
+            <div class="header" ng-app="">
+                <div class="menu-icon" ng-app="">
+                        <button class="menu-button" ng-model="myButton" ng-click="myButton = !myButton; isSmall = !isSmall">
+                            <i class="fas fa-bars fa-2x"></i>
+                        </button>
+                </div>
+            </div>
+            <div class="content">
+                    <div class="menu animate-show-hide" ng-app="ngAnimate" ng-hide="!myButton" ng-init="items=['Profile','Friends','Settings','Log Out']">
+                            <div ng-repeat="item in items" class="menu-item" ng-app="{{item}}">
+                                <p class="menu-text">{{item}}</p>
+                            </div>
+                        </div>
+                        <div class="room"></div>
+                        <div class="chat-area"  ng-class="{'small':isSmall, 'big':!isSmall}">
+                            <div class="chat-bar div-sizing">
+                                <input type="text" name="message" class="text-input">
+                                <button class="text-input-button">
+                                    <!-- <i class="fas fa-paper-plane fa-2x"></i> -->
+                                    <div class="send-icon"></div>
+                                </button> 
+                            </div>
+                        </div>
+            
+            </div>
+        </div>
+    </body>
+
+    <script>
+
+    </script>
+</html>
