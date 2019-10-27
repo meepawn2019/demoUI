@@ -98,7 +98,7 @@
         <div class="container" ng-app="myApp" ng-controller="myController">
             <div class="loginForm">
                 <h1>Web Chat Appilcation</h1>
-                <form>
+                <form action='auth' method="POST">
                     <div class="login">
                         <p>User Name:</p>
                         <input type="text" name="username" class="input" ng-model="username">
@@ -108,12 +108,16 @@
                         <input type="password" name="password" class="input" ng-model="password">
                     </div>
                     <div class="button">
-                        <button class="loginButt" ng-click="validate()">Log In</button>
+                        <button class="loginButt" type="submit">Log In</button>
                     </div>
                 </form>
                 <a href="#" >Forgot Password?</a>
                 <a href="#" style="position: absolute; bottom: 5px; right: 5px;">Don't have an account yet? Create one now</a>
             </div>
         </div>
+        
+        <script>
+            
+        </script>
     </body>
 </html>

@@ -1,36 +1,26 @@
-let express = require('express');
-let mySql = require('mysql');
+import express from 'express';
+import validate from './public/server/models/validatepassword';
 const port = 3000;
-
-
+import bodyParser from 'body-parser';
 let app = express();
-app.use(express.static("public"));
+const http = require('http').Server(app);
+const io = require('socket.io')(http);
+
+app.use(express.static('public'));
+app.set('views', __dirname + '/public');
+app.set('view engine', 'html')
 
 app.get('/',function(req, res){
-    res.redirect('/src/index.html');
+    res.sendFile(__dirname + '/public/src/index.html');
+});
+app.use(bodyParser.urlencoded({ extended: false }));
+validate(app);
+
+io.sockets.on('connection', function(socket){
+    console.log("someone connected");
 });
 
-var accountList = [
-    {userID : 1, username : 'quanghuy', password : "1234567"},
-    {userID : 2, username : 'quanghuy2', password: "123456789"}
-];
-
-app.post('/api/valiatePassword/username/:username/password/:password',function(req, res){
-    var username = req.params.username;
-    var password = req.params.password;
-    var isCorrect = accountList.find(a => a.username === username && a.password === password);
-    console.log(isCorrect);
-    if(isCorrect){
-        console.log("co chay nhung ko redirect");
-        res.contentType('application/json');
-        var data = JSON.stringify('/src/chatForm.html');
-        res.header('Content-Length', data.length);
-        res.end(data);
-    } else{
-        console.log("Wrong cmnr");
-    }
-});
-
-
-app.listen(port);
+const server = http.listen(port, function(){
+    console.log("listening on 3000");
+})
 
