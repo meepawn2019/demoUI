@@ -13,6 +13,11 @@ strong{
     font-size: 30px;
 }
 
+.userchat{
+    color: blue;
+    font-size: 30px;
+}
+
 .container {
     position: absolute;
     top: 0px;

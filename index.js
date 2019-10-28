@@ -1,5 +1,6 @@
 import express from 'express';
 import validate from './public/server/models/validatepassword';
+import msgdb from './public/server/models/msgDB';
 import session from 'express-session';
 const port = 3000;
 import bodyParser from 'body-parser';
@@ -26,7 +27,8 @@ app.get('/home', function(req, res){
 })
 
 app.get('/home/username', (req, res)=>{
-    res.send(req.session.username);
+    console.log(req.session.user);
+    res.send(req.session.user);
 })
 
 app.get('/chat.js', (req,res)=>{
@@ -38,6 +40,7 @@ validate(app);
 
 io.sockets.on('connection', function(socket){
     socket.on('message', (msg) =>{
+        msgdb(msg);
         io.emit('message', msg)
         console.log(msg);
     })
