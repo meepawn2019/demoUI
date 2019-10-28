@@ -1,23 +1,46 @@
 import express from 'express';
 import validate from './public/server/models/validatepassword';
+import session from 'express-session';
 const port = 3000;
 import bodyParser from 'body-parser';
 let app = express();
 const http = require('http').Server(app);
 const io = require('socket.io')(http);
 
+app.use(session({secret: 'ssshhhhh'}));
 app.use(express.static('public'));
 app.set('views', __dirname + '/public');
 app.set('view engine', 'html')
 
 app.get('/',function(req, res){
-    res.sendFile(__dirname + '/public/src/index.html');
+    console.log(req.session.username);
+    if(req.session.username){
+        res.redirect('/home')
+    } else{
+        res.sendFile(__dirname + '/public/src/index.html');
+    }
 });
-app.use(bodyParser.urlencoded({ extended: false }));
+
+app.get('/home', function(req, res){
+    res.sendFile(__dirname + '/public/src/chatForm.html')
+})
+
+app.get('/home/username', (req, res)=>{
+    res.send(req.session.username);
+})
+
+app.get('/chat.js', (req,res)=>{
+    res.sendFile(__dirname + '/public/src/chat.js');
+})
+
+app.use(bodyParser.urlencoded({ extended: true }));
 validate(app);
 
 io.sockets.on('connection', function(socket){
-    console.log("someone connected");
+    socket.on('message', (msg) =>{
+        io.emit('message', msg)
+        console.log(msg);
+    })
 });
 
 const server = http.listen(port, function(){

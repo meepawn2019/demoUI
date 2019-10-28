@@ -8,6 +8,11 @@ body {
     width: 100%;
 }
 
+strong{
+    color: red;
+    font-size: 30px;
+}
+
 .container {
     position: absolute;
     top: 0px;
@@ -23,6 +28,7 @@ body {
     left: 0;
     height: 75px;
     background-color: blueviolet;
+    display:flex;
 }
 
 .content {

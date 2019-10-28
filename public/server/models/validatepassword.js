@@ -10,14 +10,16 @@ module.exports = function(app){
                 con.query(sql, [username,password], function(err, result, fields){
                     if(username && password){
                         if(result.length > 0){
-                            res.redirect('/src/chatForm.html');
+                            req.session.username = username;
+                            res.redirect('/home');
+                            console.log(req.session.username);
                         } else{
                             res.send('SAI CMNR!!!');
                         }
                         res.end();
                         con.release();
                     } else{
-                        res.send('Nhap tai khoan va mat khau vao thang ngu loz!');
+                        res.send('Nhap tai khoan va mat khau vao');
                         res.end();
                         con.release();
                     }

@@ -1,7 +1,7 @@
 import mysql from 'mysql';
 
 function Connection(){
-//     this.pool = null;
+    this.pool = null;
     
     this.pool = mysql.createPool({
         connectionLimit: 10,
@@ -14,6 +14,7 @@ function Connection(){
 
     this.aquire = function(callback) {
         this.pool.getConnection(function(err, connection){
+            if(err) throw err;
             callback(err, connection);
         });
     }

@@ -11,13 +11,14 @@
         <script src="./chat.js"></script>
     </head>
     <body>
-        <div class="container" ng-app="myApp">
+        <div class="container" ng-app="myApp" ng-controller="myCtrl" data-ng-init="init()">
             <div class="header" ng-app="">
                 <div class="menu-icon" ng-app="">
                         <button class="menu-button" ng-click="myButton = !myButton">
                             <i class="fas fa-bars fa-2x"></i>
                         </button>
                 </div>
+                <div ng-model="username" style="position:absolute; width: 100px; height: 75px; align-self: center;line-height: 75px;right: 0;font-size: 28px;">{{username}}</div>
             </div>
             <div class="content">
                     <div class="menu animate-show-hide" ng-app="ngAnimate" ng-hide="!myButton" ng-init="items=['Profile','Friends','Settings','Log Out']">
@@ -26,8 +27,8 @@
                             </div>
                     </div>
                     <div class="room"></div>
-                    <div class="chat-area" ng-class="{'small':myButton, 'big':!myButton}" ng-controller="myCtrl">
-                        <div class="message" ng-model="chatarea"></div>
+                    <div class="chat-area" ng-class="{'small':myButton, 'big':!myButton}">
+                        <div class="message" ng-model="chatarea" style="overflow: auto; height: 100%;"></div>
                         <div class="chat-bar div-sizing">
                             <form style="width: 100%; height: 100%;">
                                 <input type="text" name="message" class="text-input" ng-model="message">
