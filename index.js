@@ -54,6 +54,7 @@ app.get('/chat.js', (req,res)=>{
 app.use(bodyParser.urlencoded({ extended: true }));
 validate(app);
 
+
 /* Xác nhận khi đăng nhập thành công */
 io.sockets.on('connection', function(socket){
     socket.on('message', (msg) =>{
@@ -62,6 +63,16 @@ io.sockets.on('connection', function(socket){
         console.log(msg);
     })
 });
+
+const nsp = io.of('/home');
+nsp.on('connection', function(socket){
+  console.log('someone connected');
+});
+nsp.on('message', (socket)=>{
+    msgdb(msg);
+    nsp.emit('message', msg);
+    console.log('Reicived');
+})
 
 /* Mở cổng */
 const server = http.listen(port, function(){
