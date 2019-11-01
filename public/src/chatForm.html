@@ -3,13 +3,7 @@
         <title>ChatForm</title>
         <link rel="stylesheet" href="/content/chatForm.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
-        <script src="https://kit.fontawesome.com/43b6aeb8f4.js" crossorigin="anonymous"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
-        <script src="./chat.js"></script>
+
     </head>
     <body>
         <div class="container" ng-app="myApp" ng-controller="myCtrl" data-ng-init="init()">
@@ -28,13 +22,20 @@
                 </div>
             </div>
             <div class="content" ng-controller="contentController"  ng-class="{'small':myButton, 'big':!myButton}">
-                    <div class="room" ng-init="rooms=['room1', 'room2']">
-                        <div ng-repeat="room in rooms" class="room-panel" ng-class="{'hightlighted':$index == selectedRow}" ng-click="panelClick($index)">{{room}}</div>
+                    <div class="room">
+                        <div ng-repeat="room in rooms" class="room-panel" ng-class="{'hightlighted':$index == selectedRow}" ng-click="panelClick($index, room)">{{room.chatroom_name}}</div>
                     </div>
                     <div class="chat-area" ng-view>
                     </div>
             </div>
         </div>
         <script src="/socket.io/socket.io.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.0.4/socket.io.js"></script>
+        <script src="https://kit.fontawesome.com/43b6aeb8f4.js" crossorigin="anonymous"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-animate.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js"></script>
+        <script src="./chat.js"></script>
     </body>
 </html>

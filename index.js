@@ -3,6 +3,7 @@ import validate from './public/server/models/validatepassword';  //Xác  thực 
 import msgdb from './public/server/models/msgDB';  //Thêm tin nhắn vào DB
 import session from 'express-session';
 import getHis from './public/server/models/getChatroomHistory';  //Lấy tin nhắn cũ
+import getChatroom from './public/server/models/getRoomId';
 const port = 3000;
 import bodyParser from 'body-parser';
 let app = express();
@@ -18,7 +19,6 @@ app.set('view engine', 'html')
 
 /* Redirect tới home nếu đăng nhập rồi, tới login nếu chưa */
 app.get('/',function(req, res){
-    console.log(req.session.user);
     if(req.session.user){
         res.redirect('/home')
     } else{
@@ -32,18 +32,18 @@ app.get('/home', function(req, res){
 })
 
 /* Lấy tin nhắn cũ */
-app.get('/home/messageHis', (req, res) => {
-    getHis(function (err, result) {
+app.get('/home/messageHis/:roomid', (req, res) => {
+    getHis(req.params.roomid ,function (err, result) {
         if (err) console.log("Database error!");
         else res.send(result);
       });
-
 })
 
 /* Gửi username cho client */
 app.get('/home/username', (req, res)=>{
-    console.log(req.session.user);
-    res.send(req.session.user);
+    getChatroom(req.session.user.userId, function (err, result){
+        res.send({userdata:req.session.user, chatroom: result});
+    }); 
 })
 
 /* Gửi file chat.js khi chatForm được render (AngularJS) */
@@ -64,23 +64,17 @@ validate(app);
 //     })
 // });
 
-const nsp = io.of('/home');
-nsp.on('connection', function(socket){
-  console.log('someone connected');
-});
-nsp.on('message', (socket)=>{
-    msgdb(msg);
-    nsp.emit('message', msg);
-    console.log('Reicived');
-})
 
-const room1 = io.of('/home/1');
-room1.on('connection', (socket)=>{
-    console.log('entering room');
-    socket.on('message', (msg)=>{   
-        console.log('recived');
+
+const room = io.of('/home');
+room.on('connection', (socket)=>{
+    socket.on('join', function(roomid){
+        socket.join(roomid);
+    })
+    socket.on('message', function (msg){   
+        console.log(msg);
         msgdb(msg);
-        room1.emit('message', msg);
+        room.to(msg.roomid).emit('message', msg);
     })
 })
 

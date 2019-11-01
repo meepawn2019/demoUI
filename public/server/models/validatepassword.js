@@ -13,13 +13,11 @@ module.exports = function(app){
                 con.query(sql, [username,password], function(err, result, fields){
                     if(username && password){
                         if(result.length > 0){   //Nếu truy vấn thành công
-                            console.log(result);
                             req.session.user = {
                                 userId: result[0].user_id,
                                 username: username,
                             }
                             res.redirect('/home');
-                            console.log(req.session.user.username);
                         } else{
                             res.send('SAI CMNR!!!');
                         }
