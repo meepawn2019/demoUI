@@ -2,7 +2,7 @@ const socket = io('/home');
 console.log(socket);
 var userid = null;
 var i = 1;
-
+var socketroom1;
 
 
 /* Khai báo module và controller angularjs cho toàn bộ container
@@ -12,8 +12,9 @@ var myApp = angular.module('myApp', ['ngRoute']);
 myApp.controller('myCtrl', function($scope, $http, $location){
 
     $scope.sendmessage = () =>{
-        console.log($scope.message);
-        socket.emit('message', {text: $scope.message, username: $scope.username, id: userid});
+        console.log("button pressed");
+        console.log(socketroom1);
+        socketroom1.emit('message', {text: $scope.message, username: $scope.username, id: userid});
         $scope.message = "";
     }
     $scope.getHistory = () =>{
@@ -28,11 +29,23 @@ myApp.controller('myCtrl', function($scope, $http, $location){
         $(".messagePend").animate({ scrollTop: $(document).height() }, "slow");
     }
 
+    if(socketroom1){
+        socketroom1.on('message' , (msg) => {
+            console.log("recevied");
+            //angular.element(".messagePend").append("<p><strong  class='userchat'> " + msg.username +  "</strong>"  + ": " + msg.text + "</p>");
+            if(msg.username === $scope.username){
+                console.log("concac ");
+                angular.element(".messagePend").append("<p><strong  class='userchat'> " + msg.username +  "</strong>"  + ": " + msg.text + "</p>");
+            } else angular.element(".messagePend").append("<p><strong> " + msg.username +  "</strong>"  + ": " + msg.text + "</p>");
+        })
+    }
+
 
     $scope.selectedRow = null;
     $scope.panelClick = (index) => {
         $scope.selectedRow = index;
         $location.path('' + parseInt(index + 1));
+        socketroom1 = io('/home/1');
     }
 
 
@@ -45,13 +58,6 @@ myApp.controller('myCtrl', function($scope, $http, $location){
     }
 
     /* Nhận emit message từ server-side và thêm tin nhắn mới */
-    socket.on('message' , (msg) => {
-        angular.element(".messagePend").append("<p><strong  class='userchat'> " + msg.username +  "</strong>"  + ": " + msg.text + "</p>");
-        // if(msg.username === $scope.username){
-        //     console.log("concac ");
-        //     angular.element(".messagePend").append("<p><strong  class='userchat'> " + msg.username +  "</strong>"  + ": " + msg.text + "</p>");
-        // } else angular.element(".messagePend").append("<p><strong> " + msg.username +  "</strong>"  + ": " + msg.text + "</p>");
-    })
 })
 
 myApp.controller('headerCtrl', function($rootScope, $scope){

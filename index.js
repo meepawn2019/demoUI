@@ -56,13 +56,13 @@ validate(app);
 
 
 /* Xác nhận khi đăng nhập thành công */
-io.sockets.on('connection', function(socket){
-    socket.on('message', (msg) =>{
-        msgdb(msg);
-        io.emit('message', msg)
-        console.log(msg);
-    })
-});
+// io.sockets.on('connection', function(socket){
+//     socket.on('message', (msg) =>{
+//         msgdb(msg);
+//         io.emit('message', msg)
+//         console.log(msg);
+//     })
+// });
 
 const nsp = io.of('/home');
 nsp.on('connection', function(socket){
@@ -73,6 +73,17 @@ nsp.on('message', (socket)=>{
     nsp.emit('message', msg);
     console.log('Reicived');
 })
+
+const room1 = io.of('/home/1');
+room1.on('connection', (socket)=>{
+    console.log('entering room');
+    socket.on('message', (msg)=>{   
+        console.log('recived');
+        msgdb(msg);
+        room1.emit('message', msg);
+    })
+})
+
 
 /* Mở cổng */
 const server = http.listen(port, function(){
