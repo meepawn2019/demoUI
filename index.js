@@ -4,6 +4,7 @@ import msgdb from './public/server/models/msgDB';  //Thêm tin nhắn vào DB
 import session from 'express-session';
 import getHis from './public/server/models/getChatroomHistory';  //Lấy tin nhắn cũ
 import getChatroom from './public/server/models/getRoomId';
+import addChatroom from './public/server/models/addRoom';
 const port = 3000;
 import bodyParser from 'body-parser';
 let app = express();
@@ -16,6 +17,7 @@ app.use(session({secret: 'ssshhhhh'}));
 app.use(express.static('public'));
 app.set('views', __dirname + '/public');
 app.set('view engine', 'html')
+app.use(express.json())
 
 /* Redirect tới home nếu đăng nhập rồi, tới login nếu chưa */
 app.get('/',function(req, res){
@@ -42,6 +44,7 @@ app.get('/home/messageHis/:roomid', (req, res) => {
 /* Gửi username cho client */
 app.get('/home/username', (req, res)=>{
     getChatroom(req.session.user.userId, function (err, result){
+        console.log(result);
         res.send({userdata:req.session.user, chatroom: result});
     }); 
 })
@@ -49,6 +52,11 @@ app.get('/home/username', (req, res)=>{
 /* Gửi file chat.js khi chatForm được render (AngularJS) */
 app.get('/chat.js', (req,res)=>{
     res.sendFile(__dirname + '/public/src/chat.js');
+})
+
+app.post('/home/addRoom', (req, res)=>{
+    console.log(req.body);
+    addChatroom(req.body);
 })
 
 app.use(bodyParser.urlencoded({ extended: true }));
