@@ -8,7 +8,7 @@ var socketroom1;
 /* Khai báo module và controller angularjs cho toàn bộ container
    Có thể thêm controller và directive thích hợp */
 
-var myApp = angular.module('myApp', ['ngRoute']);
+var myApp = angular.module('myApp', ['ngRoute', 'ngMaterial']);
 myApp.run(function($rootScope){
     $rootScope.rooms = [];
     $rootScope.tempRoomId = 0;
@@ -30,35 +30,32 @@ myApp.controller('myCtrl', function($scope, $http, $location, $rootScope, $route
             }
         })
     }
-
+    /* Nhận tin nhắn */
     socket.on('message', (msg) => {
         if(msg.username === $rootScope.username){
             angular.element(".messagePend").append("<p><strong  class='userchat'> " + msg.username +  "</strong>"  + ": " + msg.text + "</p>");
         } else angular.element(".messagePend").append("<p><strong> " + msg.username +  "</strong>"  + ": " + msg.text + "</p>");
     })
-    /* Nhận emit message từ server-side và thêm tin nhắn mới */
 })
 
+/* Header controller */
 myApp.controller('headerCtrl', function($rootScope, $scope){
     $scope.clickMenu = ()=>{
         $rootScope.$emit('menu-clicked');
     }
 })
-
+/* Menu controller */
 myApp.controller('menuController', function($rootScope, $scope){
     $rootScope.$on('menu-clicked', ()=>{
         $scope.myButton = !$scope.myButton;
     })
 })
-
+/* Content controller */
 myApp.controller('contentController', function($rootScope, $scope, $location, $http, $routeParams) {
-    // $rootScope.$on('entered-room', ()=>{
-    //     socket.emit('join', $rootScope.tempRoomId);
-    //     $scope.getHistory($rootScope.tempRoomId);
-    // })
     if($routeParams){
         $rootScope.tempRoomId = $routeParams.roomid;
     }
+
     $rootScope.$on('menu-clicked', ()=>{
         $scope.myButton = !$scope.myButton;
     })
@@ -70,8 +67,6 @@ myApp.controller('contentController', function($rootScope, $scope, $location, $h
         if($scope.text) $scope.text.remove();
         $scope.selectedRow = index;
         socket.emit('join', $rootScope.tempRoomId);
-//        console.log($routeParams);
-        //console.log(socket);
     }
     if($rootScope.tempRoomId){
         socket.emit('join', $rootScope.tempRoomId);

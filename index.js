@@ -55,17 +55,6 @@ app.use(bodyParser.urlencoded({ extended: true }));
 validate(app);
 
 
-/* Xác nhận khi đăng nhập thành công */
-// io.sockets.on('connection', function(socket){
-//     socket.on('message', (msg) =>{
-//         msgdb(msg);
-//         io.emit('message', msg)
-//         console.log(msg);
-//     })
-// });
-
-
-
 const room = io.of('/home');
 room.on('connection', (socket)=>{
     socket.on('join', function(roomid){
