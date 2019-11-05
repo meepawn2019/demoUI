@@ -44,7 +44,6 @@ app.get('/home/messageHis/:roomid', (req, res) => {
 /* Gửi username cho client */
 app.get('/home/username', (req, res)=>{
     getChatroom(req.session.user.userId, function (err, result){
-        console.log(result);
         res.send({userdata:req.session.user, chatroom: result});
     }); 
 })
@@ -54,9 +53,25 @@ app.get('/chat.js', (req,res)=>{
     res.sendFile(__dirname + '/public/src/chat.js');
 })
 
+app.get('/app.js', (req,res)=>{
+    res.sendFile(__dirname + '/public/src/app.js');
+})
+
+app.get('/headerCtrl.js', (req,res)=>{
+    res.sendFile(__dirname + '/public/src/headerCtrl.js');
+})
+
+app.get('/menuCtrl.js', (req,res)=>{
+    res.sendFile(__dirname + '/public/src/menuCtrl.js');
+})
+
 app.post('/home/addRoom', (req, res)=>{
     console.log(req.body);
-    addChatroom(req.body);
+    addChatroom(req.body, function(err){
+        //console.log(err.code);
+        if(err) res.send({status:false});
+        else res.send({status:true});
+    });
 })
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -69,9 +84,8 @@ room.on('connection', (socket)=>{
         socket.join(roomid);
     })
     socket.on('message', function (msg){   
-        console.log(msg);
         msgdb(msg);
-        room.to(msg.roomid).emit('message', msg);
+        room.in(msg.roomid).emit('message', msg);
     })
 })
 

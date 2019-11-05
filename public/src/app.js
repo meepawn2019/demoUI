@@ -1,15 +1,6 @@
 var app = angular.module('myApp', []);
 
-app.controller('myController', myController);
-
-// app.config(function ($qProvider) {
-//     $qProvider.errorOnUnhandledRejections(false);
-// });
-
-/* File này không hoặc chưa dùng đến
- */
-
-function myController($scope, $http){
+app.controller('myController', function($scope, $http){
     $scope.username = "";
     $scope.password = "";
 
@@ -19,4 +10,5 @@ function myController($scope, $http){
             window.location = result.data;
         })
     }
-}
+});
+
